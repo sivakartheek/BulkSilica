@@ -1,3 +1,12 @@
+// @main.cpp determines the structural and thermodynamic properties 
+// of silica glass material for given temperature and pressure
+// conditions. The PBC is used to make the limited number of atoms
+// as a bulk. The interatomic interactions were modeled using the 
+// Coulomb and Buckingham potential.
+
+// @author - Naveen Kumar Kaliannan
+
+
 #include<iostream>
 #include<cmath>
 #include<time.h>
@@ -17,13 +26,13 @@ const double Temp     = 2750;         //Temperature of the system
 const double Pr       = 0.6023;      //Pressure of the system
 
 
-// generates the random number - integer
+// generates a random  integer between [min,max)
 int Rand_INT(int min,int max) //[min,max)
 {
   return rand()%(max-min)+min;
 }
 
-// generates the random number - double
+// generates the random number between 0 and 1
 double Rand_DOUBLE() //(0,1)
 {
   return (double) rand() / (double) RAND_MAX;
@@ -49,7 +58,7 @@ T max3(T a, T b, T c)
  return (a < c && b < c) ? c : (a < b) ? b : a;
 }
 
-// Short-range interaction - interatomic potentials were taken from BKS potential
+// Short-range interactions
 double BKS(vector<double> const &r, double L, double q1, double q2, int size, int rank)
 {
   double u = 0, rij  = 0;  
