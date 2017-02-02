@@ -57,7 +57,7 @@ T max3(T a, T b, T c)
  return (a < c && b < c) ? c : (a < b) ? b : a;
 }
 
-// Short-range interactions
+// Short-range interactions - BKS
 double BKS(vector<double> const &r, double L, double q1, double q2, int size, int rank)
 {
   double u = 0, rij  = 0;  
@@ -87,6 +87,43 @@ double BKS(vector<double> const &r, double L, double q1, double q2, int size, in
               if(r[i+3] != r[j+3]) //silicon - oxygen
                 { 
                   u += (1737349.967*exp(-rij*4.87318)) - (12599.51795/pow(rij,6));
+                }
+            }
+        }
+    }
+  return u;
+}
+
+// Short-range interactions - TCD potential
+double TCD(vector<double> const &r, double L, double q1, double q2, int size, int rank)
+{
+  double u = 0, rij  = 0;  
+  // MPI variables
+  int from = 0, to = 0;
+  from = rank * r.size() / size ;
+  to = (rank + 1) * r.size() / size ;
+  if(rank + 1 == size)
+  {
+    to = to - 4;
+  }
+
+  for(unsigned int i = from;i < to ;i += 4)
+    {
+      for(unsigned int j = i+4;j < r.size();j += 4)
+        {
+          rij = sqrt( pow((r[i+0]-r[j+0]) - L * round((r[i+0]-r[j+0])/L),2) 
+                    + pow((r[i+1]-r[j+1]) - L * round((r[i+1]-r[j+1])/L),2) 
+                    + pow((r[i+2]-r[j+2]) - L * round((r[i+2]-r[j+2])/L),2) );
+          // Potential truncation
+          if(rij < 5)
+            {
+              if(r[i+3] == r[j+3] && r[i+3] == q2)//oxygen - oxygen
+                {
+                  u += (Unit_eV * 2029.2204*exp(-rij/0.343645)) - (Unit_eV * 192.58/pow(rij,6));
+                }
+              if(r[i+3] != r[j+3]) //silicon - oxygen
+                { 
+                  u += (Unit_eV * 13702.905*exp(-rij/0.193817)) - (Unit_eV * 54.681/pow(rij,6));
                 }
             }
         }
@@ -201,7 +238,7 @@ int main(int argc, char** argv)
 
   double U_local = 0, U_global = 0, kappa = 0.250, u = 0, u_new = 0;
   U_local = ( RealandReciprocalSpace(r, L, L, L, kappa, 1, size, rank) 
-             + kappa * PointEnergy(r, size, rank) / sqrt(Pi) ) * Unit_Coulomb + BKS(r, L, q1, q2, size, rank);
+             + kappa * PointEnergy(r, size, rank) / sqrt(Pi) ) * Unit_Coulomb + TCD(r, L, q1, q2, size, rank);
   MPI_Reduce(&U_local, &u, 1, MPI_DOUBLE, MPI_SUM, root, MPI_COMM_WORLD);
   u += (Unit_Coulomb *  2 * Pi * pow(Dipole(r),2) / (3 * V)) ;
 
@@ -238,7 +275,7 @@ int main(int argc, char** argv)
       //4. Calculate the potential energy of the configurations
       U_global = 0;
       U_local = ( RealandReciprocalSpace(r_new, L, L, L, kappa, 1, size, rank) 
-             + kappa * PointEnergy(r_new, size, rank) / sqrt(Pi) ) * Unit_Coulomb + BKS(r_new, L, q1, q2, size, rank);
+             + kappa * PointEnergy(r_new, size, rank) / sqrt(Pi) ) * Unit_Coulomb + TCD(r_new, L, q1, q2, size, rank);
 
       MPI_Reduce(&U_local, &U_global, 1, MPI_DOUBLE, MPI_SUM, root, MPI_COMM_WORLD);
      if (rank == root)
