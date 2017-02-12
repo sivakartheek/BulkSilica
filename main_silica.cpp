@@ -236,7 +236,7 @@ int main(int argc, char** argv)
   MPI_Bcast(&L, 1, MPI_DOUBLE, root, MPI_COMM_WORLD);
   MPI_Bcast(&r[0], r.size(), MPI_DOUBLE, root, MPI_COMM_WORLD);
 
-  double U_local = 0, U_global = 0, kappa = 0.250, u = 0, u_new = 0;
+  double U_local = 0, U_global = 0, kappa = 0.2150, u = 0, u_new = 0;
   U_local = ( RealandReciprocalSpace(r, L, L, L, kappa, 1, size, rank) 
              + kappa * PointEnergy(r, size, rank) / sqrt(Pi) ) * Unit_Coulomb + TCD(r, L, q1, q2, size, rank);
   MPI_Reduce(&U_local, &u, 1, MPI_DOUBLE, MPI_SUM, root, MPI_COMM_WORLD);
