@@ -331,7 +331,7 @@ int main(int argc, char** argv)
                            {
                              N_Si += 1;
                            }
-                         if(rij <= rad[i] + (RDF_h/2) && rij > rad[i] - (RDF_h/2) && r[k_+3] != r[j+3] && r[k_+3] != q2)
+                         if(rij <= rad[i] + (RDF_h/2) && rij > rad[i] - (RDF_h/2) && r[k_+3] != r[j+3] && r[k_+3] == q2)
                            {
                              N_SiO += 1;
                            }
