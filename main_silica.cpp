@@ -313,35 +313,35 @@ int main(int argc, char** argv)
                  double rij = 0;
                  for(unsigned int j = 0;j < r.size() - 4 ;j = j + 4)
                    {
-                     for(unsigned int k_ = j + 4;k_ < r.size() ;k_ = k_ + 4)
+                     for(unsigned int k_ = 0;k_ < r.size() ;k_ = k_ + 4)
                        {
                          rij = sqrt( pow((r[k_+0]-r[j+0]) - L * round((r[k_+0]-r[j+0])/L),2) 
                                    + pow((r[k_+1]-r[j+1]) - L * round((r[k_+1]-r[j+1])/L),2) 
                                    + pow((r[k_+2]-r[j+2]) - L * round((r[k_+2]-r[j+2])/L),2) );
 
-                         if(rij <= rad[i] + (RDF_h/2) && rij > rad[i] - (RDF_h/2) )
+                         if(rij <= rad[i] + (RDF_h/2) && rij > rad[i] - (RDF_h/2) && j != k_ )
                            {
                              N_All += 1;
                            }
-                         if(rij <= rad[i] + (RDF_h/2) && rij > rad[i] - (RDF_h/2) && r[k_+3] == r[j+3] && r[k_+3] == q2)
+                         if(rij <= rad[i] + (RDF_h/2) && rij > rad[i] - (RDF_h/2) && r[k_+3] == r[j+3] && r[k_+3] == q2 && j != k_)
                            {
                              N_O += 1;
                            }
-                         if(rij <= rad[i] + (RDF_h/2) && rij > rad[i] - (RDF_h/2) && r[k_+3] == r[j+3] && r[k_+3] == q1 )
+                         if(rij <= rad[i] + (RDF_h/2) && rij > rad[i] - (RDF_h/2) && r[k_+3] == r[j+3] && r[k_+3] == q1 && j != k_)
                            {
                              N_Si += 1;
                            }
-                         if(rij <= rad[i] + (RDF_h/2) && rij > rad[i] - (RDF_h/2) && r[k_+3] != r[j+3] && r[k_+3] == q2)
+                         if(rij <= rad[i] + (RDF_h/2) && rij > rad[i] - (RDF_h/2) && r[k_+3] != r[j+3] && r[k_+3] == q1 && j != k_)
                            {
                              N_SiO += 1;
                            }
                        }
                    }
 
-                 RDF_all[i] += 2 * N_All  /( ((r.size()/4) / V) * 4 * Pi * rad[i] * rad[i] *  RDF_h);
-                 RDF_Si[i]  += 2 * N_Si  / ( (((r.size()/4)*1/3) / V) * 4 * Pi * rad[i] * rad[i] *  RDF_h);
-                 RDF_O [i]  += 2 * N_O   / ( (((r.size()/4)*2/3) / V) * 4 * Pi * rad[i] * rad[i] *  RDF_h);
-                 RDF_SiO[i] += 2 * N_SiO / ( (((r.size()/4)*2/3) / V) * 4 * Pi * rad[i] * rad[i] *  RDF_h);
+                 RDF_all[i] += N_All  /( ((r.size()/4) / V) * 4 * Pi * rad[i] * rad[i] *  RDF_h);
+                 RDF_Si[i]  += N_Si  / ( (((r.size()/4)*1/3) / V) * 4 * Pi * rad[i] * rad[i] *  RDF_h);
+                 RDF_O [i]  += N_O   / ( (((r.size()/4)*2/3) / V) * 4 * Pi * rad[i] * rad[i] *  RDF_h);
+                 RDF_SiO[i] += N_SiO / ( (((r.size()/4)*1/3) / V) * 4 * Pi * rad[i] * rad[i] *  RDF_h);
                }
            }
       }
