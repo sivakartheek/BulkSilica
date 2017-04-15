@@ -311,7 +311,7 @@ int main(int argc, char** argv)
                {
                  unsigned int N_All = 0,N_Si = 0,N_O = 0,N_SiO = 0;
                  double rij = 0;
-                 for(unsigned int j = 0;j < r.size() - 4 ;j = j + 4)
+                 for(unsigned int j = 0;j < r.size() ;j = j + 4)
                    {
                      for(unsigned int k_ = 0;k_ < r.size() ;k_ = k_ + 4)
                        {
