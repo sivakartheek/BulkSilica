@@ -1,4 +1,4 @@
-all: RDF_O RDF_SiO RDF_Silica RDF_Si density energy
+all: RDF_O RDF_SiO RDF_Silica RDF_Si density energy BAD_osio BAD_siosi
 
 energy:energy.gp
 	gnuplot energy.gp
@@ -17,4 +17,10 @@ RDF_Silica:RDF_Silica.gp
 
 RDF_Si:RDF_Si.gp
 	gnuplot RDF_Si.gp
+
+BAD_osio:osio.gp
+	gnuplot osio.gp
+
+BAD_siosi:siosi.gp
+	gnuplot siosi.gp
 
